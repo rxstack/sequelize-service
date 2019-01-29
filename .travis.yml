@@ -8,7 +8,7 @@ cache:
     - "node_modules"
 addons:
   code_climate:
-    repo_token:
+    repo_token: 3b796dff159e18c68c3ca8e0784349e55e7b52212b010515af875eef9b353c50
 
 before_install:
   - npm i -g npm@latest
