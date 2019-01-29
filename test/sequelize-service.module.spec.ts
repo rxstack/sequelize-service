@@ -1,10 +1,11 @@
+require('dotenv').config();
 import 'reflect-metadata';
 import {Application} from '@rxstack/core';
 import {Injector} from 'injection-js';
 import {SEQUELIZE_SERVICE_OPTIONS, TASK_SERVICE} from './mocks/SEQUELIZE_SERVICE_OPTIONS';
 import {SEQUELIZE_CONNECTION_TOKEN, SequelizeConnection, SequelizeService} from '../src';
 
-describe('MongooseService:MongooseServiceModule', () => {
+describe('SequelizeService:SequelizeServiceModule', () => {
   // Setup application
   const app = new Application(SEQUELIZE_SERVICE_OPTIONS);
   let injector: Injector;
