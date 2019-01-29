@@ -14,7 +14,7 @@ export const TASK_SERVICE = new InjectionToken<SequelizeService<Task>>('TASK_SER
 export const SEQUELIZE_SERVICE_OPTIONS: ApplicationOptions = {
   imports: [SequelizeServiceModule.configure({
     connection: {
-      host: 'localhost',
+      host: '127.0.0.1',
       database: 'test',
       username: 'root',
       password: 'root',
