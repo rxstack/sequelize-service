@@ -1,0 +1,98 @@
+{
+  "name": "@rxstack/sequelize-service",
+  "version": "0.1.0",
+  "description": "RxStack Sequelize Service",
+  "private": false,
+  "author": "Nikolay Georgiev <symfonist@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rxstack/sequelize-service.git"
+  },
+  "engines": {
+    "node": ">=8"
+  },
+  "keywords": [
+    "rxstack",
+    "mongoose"
+  ],
+  "main": "dist/index",
+  "typings": "dist/index",
+  "scripts": {
+    "prepublishOnly": "npm run compile",
+    "compile": "npm run clean && tsc -p .",
+    "clean": "rm -rf dist",
+    "lint": "tslint --project tsconfig.json --format stylish",
+    "mocha": "mocha --opts mocha.opts",
+    "coverage": "nyc npm run mocha",
+    "test": "npm run lint && npm run coverage"
+  },
+  "peerDependencies": {
+    "@rxstack/core": "^0.1.2",
+    "@rxstack/data-fixtures": "^0.1.2",
+    "@rxstack/exceptions": "^0.1.3",
+    "@rxstack/platform": "^0.1.7",
+    "@rxstack/query-filter": "^0.1",
+    "injection-js": "^2.1",
+    "reflect-metadata": "^0.1"
+  },
+  "dependencies": {
+    "@rxstack/core": "^0.1.2",
+    "@rxstack/data-fixtures": "^0.1.2",
+    "@rxstack/exceptions": "^0.1.3",
+    "@rxstack/platform": "^0.1.7",
+    "@rxstack/query-filter": "^0.1.1",
+    "injection-js": "^2.2.1",
+    "lodash": "^4.17.11",
+    "mysql2": "^1.6.4",
+    "reflect-metadata": "^0.1.13",
+    "sequelize": "^4.42.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.2",
+    "@types/lodash": "^4.14.119",
+    "@types/mocha": "^2.2.48",
+    "@types/node": "^7.10.2",
+    "chai": "3.5.0",
+    "istanbul": "0.4.5",
+    "mocha": "^5.2.0",
+    "nyc": "^11.0.3",
+    "should": "^13.2.3",
+    "sinon": "^6.3.4",
+    "source-map-support": "^0.4.15",
+    "ts-node": "^3.1.0",
+    "tslint": "^5.12.1",
+    "typescript": "^3.2.2",
+    "uuid": "^3.3.2"
+  },
+  "bugs": {
+    "url": "https://github.com/rxstack/sequelize-service/issues"
+  },
+  "homepage": "https://github.com/rxstack/sequelize-service",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "nyc": {
+    "include": [
+      "./src/**/*.ts"
+    ],
+    "exclude": [
+      "./test/**/*.spec.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "text-summary",
+      "html",
+      "lcov"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  }
+}
