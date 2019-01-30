@@ -23,7 +23,6 @@ describe('SequelizeService:Impl', () => {
   });
 
   after(async() =>  {
-    await conn.close();
     await app.stop();
   });
 

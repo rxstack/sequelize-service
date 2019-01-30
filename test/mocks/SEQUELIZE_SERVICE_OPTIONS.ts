@@ -10,7 +10,6 @@ import {taskSchema} from './task.schema';
 import {PURGER_SERVICE} from '@rxstack/data-fixtures';
 
 export const TASK_SERVICE = new InjectionToken<SequelizeService<Task>>('TASK_SERVICE');
-
 export const SEQUELIZE_SERVICE_OPTIONS: ApplicationOptions = {
   imports: [SequelizeServiceModule.configure({
     connection: {

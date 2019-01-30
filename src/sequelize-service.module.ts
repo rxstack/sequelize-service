@@ -1,12 +1,18 @@
-import {Module, ModuleWithProviders} from '@rxstack/core';
+import {COMMAND_REGISTRY, Module, ModuleWithProviders} from '@rxstack/core';
 import {SEQUELIZE_CONNECTION_TOKEN, SequelizeConnection, SequelizeServiceModuleOptions} from './interfaces';
 import {Provider} from 'injection-js';
+import {DropCommand, SyncCommand} from './commands';
 
+const winstonLogger = require('winston');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const connectionProvider =  async function(options: SequelizeServiceModuleOptions): Promise<Provider> {
   const connection: SequelizeConnection = new Sequelize(Object.assign(options.connection, {
-      operatorsAliases: operators
+    operatorsAliases: operators,
+    logging: (data: any, benchmark: any) => {
+      winstonLogger.log('info', 'Sequelize:', {query: data, benchmark: benchmark + ' ms'});
+    },
+    benchmark: true
   }));
   await connection.authenticate();
   return { provide: SEQUELIZE_CONNECTION_TOKEN, useValue: connection};
@@ -17,7 +23,11 @@ export class SequelizeServiceModule {
   static configure(configuration: SequelizeServiceModuleOptions): ModuleWithProviders {
     return {
       module: SequelizeServiceModule,
-      providers: [connectionProvider(configuration)]
+      providers: [
+        connectionProvider(configuration),
+        { provide: COMMAND_REGISTRY, useClass: SyncCommand, multi: true },
+        { provide: COMMAND_REGISTRY, useClass: DropCommand, multi: true }
+      ]
     };
   }
 }
