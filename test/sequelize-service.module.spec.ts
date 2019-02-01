@@ -1,9 +1,8 @@
-require('dotenv').config();
 import 'reflect-metadata';
 import {Application} from '@rxstack/core';
 import {Injector} from 'injection-js';
 import {SEQUELIZE_SERVICE_OPTIONS, TASK_SERVICE} from './mocks/SEQUELIZE_SERVICE_OPTIONS';
-import {SEQUELIZE_CONNECTION_TOKEN, SequelizeConnection, SequelizeService} from '../src';
+import {SEQUELIZE_CONNECTION_TOKEN, SequelizeService} from '../src';
 
 describe('SequelizeService:SequelizeServiceModule', () => {
   // Setup application

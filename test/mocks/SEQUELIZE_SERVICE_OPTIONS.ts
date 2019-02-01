@@ -1,3 +1,8 @@
+process.env.MYSQL_HOST = process.env.MYSQL_HOST || 'mysqldb'
+process.env.MYSQL_DATABASE = process.env.MYSQL_DATABASE || 'test'
+process.env.MYSQL_USER = process.env.MYSQL_USER || 'root'
+process.env.MYSQL_PASSWORD = process.env.MYSQL_PASSWORD || 'root'
+
 import {ApplicationOptions} from '@rxstack/core';
 import {
   SEQUELIZE_CONNECTION_TOKEN,
@@ -27,7 +32,7 @@ export const SEQUELIZE_SERVICE_OPTIONS: ApplicationOptions = {
     {
       provide: TASK_SERVICE,
       useFactory: (conn: SequelizeConnection) => {
-        return new SequelizeService({ idField: '_id', model: taskSchema(conn) });
+        return new SequelizeService({ idField: '_id', defaultLimit: 25, model: taskSchema(conn) });
       },
       deps: [SEQUELIZE_CONNECTION_TOKEN],
     },

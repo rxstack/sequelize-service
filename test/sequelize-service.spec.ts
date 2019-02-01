@@ -1,4 +1,3 @@
-require('dotenv').config();
 import 'reflect-metadata';
 import {Application} from '@rxstack/core';
 import {SEQUELIZE_SERVICE_OPTIONS, TASK_SERVICE} from './mocks/SEQUELIZE_SERVICE_OPTIONS';

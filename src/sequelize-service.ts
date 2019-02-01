@@ -56,12 +56,11 @@ export class SequelizeService<T> implements ServiceInterface<T>, InjectorAwareIn
   }
 
   async findMany(query?: QueryInterface): Promise<T[]> {
-    const criteria = query && query.where ? query.where : {};
-    const q = {  where: criteria, raw: true };
-    if (query && query.sort) q['order'] = this.getOrder(query.sort);
-    if (query && query.limit) q['limit'] = query.limit;
-    if (query && query.skip) q['offset'] = query.skip;
-    return await this.getModel().findAll(q);
+    query = Object.assign({where: {}, limit: this.options.defaultLimit, skip: 0, sort: {}}, query);
+    const sqlQuery = {
+      where: query.where, limit: query.limit, offset: query.skip, order: this.getOrder(query.sort), raw: true
+    };
+    return await this.getModel().findAll(sqlQuery);
   }
 
   protected getOrder(sort: Object): [string, number][] {

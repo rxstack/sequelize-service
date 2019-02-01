@@ -10,7 +10,7 @@ const connectionProvider =  async function(options: SequelizeServiceModuleOption
   const connection: SequelizeConnection = new Sequelize(Object.assign(options.connection, {
     operatorsAliases: operators,
     logging: (data: any, benchmark: any) => {
-      winstonLogger.log('info', 'Sequelize:', {query: data, benchmark: benchmark + ' ms'});
+      winstonLogger.log('debug', 'Sequelize:', {query: data, benchmark: benchmark + ' ms'});
     },
     benchmark: true
   }));
@@ -33,18 +33,13 @@ export class SequelizeServiceModule {
 }
 
 const operators = {
-    $eq: Op.eq,
-    $ne: Op.ne,
-    $gte: Op.gte,
-    $gt: Op.gt,
-    $lte: Op.lte,
-    $lt: Op.lt,
-    $in: Op.in,
-    $nin: Op.notIn,
-    $like: Op.like,
-    $notLike: Op.notLike,
-    $iLike: Op.ilike,
-    $notILike: Op.notILike,
-    $or: Op.or,
-    $and: Op.and
+  $eq: Op.eq,
+  $ne: Op.ne,
+  $gte: Op.gte,
+  $gt: Op.gt,
+  $lte: Op.lte,
+  $lt: Op.lt,
+  $in: Op.in,
+  $nin: Op.notIn,
+  $or: Op.or
 };
