@@ -1,7 +1,7 @@
 process.env.MYSQL_HOST = process.env.MYSQL_HOST || 'mysqldb'
 process.env.MYSQL_DATABASE = process.env.MYSQL_DATABASE || 'test'
 process.env.MYSQL_USER = process.env.MYSQL_USER || 'root'
-process.env.MYSQL_PASSWORD = process.env.MYSQL_PASSWORD || 'root'
+process.env.MYSQL_PASSWORD = process.env.MYSQL_PASSWORD === 'undefined' ? 'root' : process.env.MYSQL_PASSWORD;
 
 import {ApplicationOptions} from '@rxstack/core';
 import {
