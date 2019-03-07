@@ -4,15 +4,14 @@ import {SEQUELIZE_SERVICE_OPTIONS, TASK_SERVICE} from './mocks/SEQUELIZE_SERVICE
 import {Injector} from 'injection-js';
 import {data1} from './mocks/data';
 import {Task} from './mocks/task';
-import {PURGER_SERVICE} from '@rxstack/data-fixtures';
-import {SEQUELIZE_CONNECTION_TOKEN, SequelizeConnection, SequelizeService} from '../src';
+import {SEQUELIZE_CONNECTION_TOKEN, SequelizeService} from '../src';
 
 describe('SequelizeService:Impl', () => {
   // Setup application
   const app = new Application(SEQUELIZE_SERVICE_OPTIONS);
   let injector: Injector;
   let service: SequelizeService<Task>;
-  let conn: SequelizeConnection;
+  let conn: any;
 
   before(async() =>  {
     await app.start();
@@ -30,7 +29,7 @@ describe('SequelizeService:Impl', () => {
   });
 
   afterEach(async () => {
-    await injector.get(PURGER_SERVICE).purge();
+    await conn.drop();
   });
 
   it('#insertOne', async () => {
@@ -39,6 +38,19 @@ describe('SequelizeService:Impl', () => {
     (typeof obj._id).should.equal('number');
     obj.name.should.be.equal(data.name);
     obj.completed.should.be.equal(false);
+  });
+
+  it('#insertOne with transaction', async () => {
+    const data = data1[0];
+    try {
+      await conn.transaction(async (t: any) => {
+        await service.insertOne(data, {transaction: t});
+        throw new Error('Interrupt transaction');
+      });
+    } catch (e) { }
+
+    const cnt = await service.count();
+    cnt.should.be.equal(0);
   });
 
   it('#insertMany', async () => {

@@ -6,6 +6,10 @@ node_js:
 cache:
   directories:
     - "node_modules"
+env:
+  global:
+    - CC_TEST_REPORTER_ID=3b796dff159e18c68c3ca8e0784349e55e7b52212b010515af875eef9b353c50
+    - MYSQL_HOST=localhost MYSQL_DATABASE=test MYSQL_USER=root MYSQL_PASSWORD=""
 before_install:
   - npm i -g npm@latest
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
@@ -14,12 +18,10 @@ before_install:
   - mysql -e 'CREATE DATABASE test;'
 install:
   - npm install
-  - npm install @rxstack/core@^0.1 @rxstack/data-fixtures@^0.1 @rxstack/platform@^0.1 @rxstack/exceptions@^0.1 @rxstack/query-filter@^0.1 @rxstack/security@^0.1
+  - npm install @rxstack/core@^0.1 @rxstack/platform@^0.1 @rxstack/exceptions@^0.1 @rxstack/query-filter@^0.1 @rxstack/security@^0.10
 script:
   - npm test
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 services:
   - mysql
-env:
-  - MYSQL_HOST=localhost MYSQL_DATABASE=test MYSQL_USER=root MYSQL_PASSWORD="" CC_TEST_REPORTER_ID=3b796dff159e18c68c3ca8e0784349e55e7b52212b010515af875eef9b353c50

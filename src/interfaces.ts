@@ -1,20 +1,16 @@
 import {ServiceOptions} from '@rxstack/platform';
 import {InjectionToken} from 'injection-js';
+import {LoggingLevel} from '@rxstack/core';
 
 export interface SequelizeServiceModuleOptions {
   connection: any;
+  logger?: {
+    enabled: boolean;
+    level?: LoggingLevel;
+  };
 }
 
-export interface SequelizeConnection {
-  define(name: string, schema: Object, options?: Object): Object;
-  authenticate(): Promise<void>;
-  close(): Promise<void>;
-  sync(options?: any): Promise<void>;
-  drop(): Promise<void>;
-  query(q: string, options?: any): Promise<any>;
-}
-
-export const SEQUELIZE_CONNECTION_TOKEN = new InjectionToken<SequelizeConnection>('SEQUELIZE_CONNECTION_TOKEN');
+export const SEQUELIZE_CONNECTION_TOKEN = new InjectionToken<any>('SEQUELIZE_CONNECTION_TOKEN');
 
 export interface SequelizeServiceOptions extends ServiceOptions {
   model: any;

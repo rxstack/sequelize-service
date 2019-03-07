@@ -16,50 +16,55 @@ export class SequelizeService<T> implements ServiceInterface<T>, InjectorAwareIn
     this.injector = injector;
   }
 
-  async insertOne(data: Object): Promise<T> {
-    const result = await this.getModel().create(data);
+  async insertOne(data: Object, options?: any): Promise<T> {
+    const result = await this.getModel().create(data, options);
     return result.get({plain: true});
   }
 
-  async insertMany(data: Object[]): Promise<T[]> {
-    const result = await this.getModel().bulkCreate(data);
+  async insertMany(data: Object[], options?: any): Promise<T[]> {
+    const result = await this.getModel().bulkCreate(data, options);
     return result.map((item: any) => item.get({plain: true}));
   }
 
-  async updateOne(id: any, data: Object): Promise<void> {
-    return await this.getModel().update(_.omit(data, [this.options.idField]), {where: {[this.options.idField]: id}});
+  async updateOne(id: any, data: Object, options?: any): Promise<void> {
+    return await this.getModel().update(
+      _.omit(data, [this.options.idField]), Object.assign({where: {[this.options.idField]: id}}, options)
+    );
   }
 
-  async updateMany(criteria: Object, data: Object): Promise<number> {
-    const result = await this.getModel().update(_.omit(data, [this.options.idField]), {where: criteria});
-    return result.shift();
+  async updateMany(criteria: Object, data: Object, options?: any): Promise<number> {
+    const result = await this.getModel().update(
+      _.omit(data, [this.options.idField]),
+      Object.assign({where: criteria}, options)
+    );
+    return parseInt(result.shift());
   }
 
-  async removeOne(id: any): Promise<void> {
-    await this.getModel().destroy({where: {[this.options.idField]: id}});
+  async removeOne(id: any, options?: any): Promise<void> {
+    await this.getModel().destroy(Object.assign({where: {[this.options.idField]: id}}, options));
   }
 
-  async removeMany(criteria: Object): Promise<number> {
-    return await this.getModel().destroy({where: criteria});
+  async removeMany(criteria: Object, options?: any): Promise<number> {
+    return await this.getModel().destroy(Object.assign({where: criteria}, options));
   }
 
-  count(criteria?: Object): Promise<number> {
-    return this.getModel().count({ where: criteria });
+  count(criteria?: Object, options?: any): Promise<number> {
+    return this.getModel().count(Object.assign({ where: criteria }, options));
   }
 
-  async find(id: any): Promise<T> {
-    return await this.getModel().findByPk(id);
+  async find(id: any, options?: any): Promise<T> {
+    return await this.getModel().findByPk(id, options);
   }
 
-  async findOne(criteria: Object): Promise<T> {
-    return this.getModel().findOne({ where: criteria, raw: true });
+  async findOne(criteria: Object, options?: any): Promise<T> {
+    return this.getModel().findOne(Object.assign({ where: criteria, raw: true }, options));
   }
 
-  async findMany(query?: QueryInterface): Promise<T[]> {
+  async findMany(query?: QueryInterface, options?: any): Promise<T[]> {
     query = Object.assign({where: {}, limit: this.options.defaultLimit, skip: 0, sort: {}}, query);
-    const sqlQuery = {
+    const sqlQuery = Object.assign({
       where: query.where, limit: query.limit, offset: query.skip, order: this.getOrder(query.sort), raw: true
-    };
+    }, options);
     return await this.getModel().findAll(sqlQuery);
   }
 

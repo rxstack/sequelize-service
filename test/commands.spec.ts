@@ -1,12 +1,12 @@
 import 'reflect-metadata';
 import {Application, CommandManager} from '@rxstack/core';
 import {SEQUELIZE_SERVICE_OPTIONS} from './mocks/SEQUELIZE_SERVICE_OPTIONS';
-import {SEQUELIZE_CONNECTION_TOKEN, SequelizeConnection} from '../src';
+import {SEQUELIZE_CONNECTION_TOKEN} from '../src';
 
 describe('Console:Commands', () => {
   // Setup application
   const app = new Application(SEQUELIZE_SERVICE_OPTIONS);
-  let conn: SequelizeConnection;
+  let conn: any;
 
   before(async () => {
     await app.start();

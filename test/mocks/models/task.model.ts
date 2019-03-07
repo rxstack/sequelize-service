@@ -1,7 +1,7 @@
-import {SequelizeConnection} from '../../src';
+import {SequelizeConnection} from '../../../src';
 const Sequelize = require('sequelize');
 
-export const taskSchema = (connection: SequelizeConnection): Object =>  {
+export const defineTask = (connection: SequelizeConnection): Object =>  {
   return connection.define('task', {
     _id: {
       type: Sequelize.INTEGER,
@@ -9,7 +9,10 @@ export const taskSchema = (connection: SequelizeConnection): Object =>  {
       autoIncrement: true
     },
     name: {
-      type: Sequelize.STRING, allowNull: false, unique: true
+      type: Sequelize.STRING, allowNull: false, unique: true,
+      validate: {
+        notEmpty: true
+      }
     },
     completed: {
       type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false
