@@ -1,6 +1,6 @@
 {
   "name": "@rxstack/sequelize-service",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "RxStack Sequelize Service",
   "private": false,
   "author": "Nikolay Georgiev <symfonist@gmail.com>",
@@ -14,6 +14,7 @@
   },
   "keywords": [
     "rxstack",
+    "platform",
     "sequelize",
     "mysql"
   ],
@@ -29,12 +30,11 @@
     "test": "npm run lint && npm run coverage"
   },
   "peerDependencies": {
-    "@rxstack/core": "^0.1",
-    "@rxstack/data-fixtures": "^0.1",
-    "@rxstack/exceptions": "^0.1",
-    "@rxstack/platform": "^0.1",
-    "@rxstack/query-filter": "^0.1",
-    "@rxstack/security": "^0.1"
+    "@rxstack/core": "^0.2",
+    "@rxstack/exceptions": "^0.2",
+    "@rxstack/platform": "^0.2",
+    "@rxstack/query-filter": "^0.2",
+    "@rxstack/security": "^0.2"
   },
   "dependencies": {
     "injection-js": "^2.1",
@@ -44,9 +44,9 @@
   },
   "devDependencies": {
     "@types/chai": "^4.1.2",
-    "@types/lodash": "^4.14.122",
+    "@types/lodash": "^4.14.123",
     "@types/mocha": "^2.2.48",
-    "@types/node": "^11.10.5",
+    "@types/node": "^11.12.1",
     "chai": "3.5.0",
     "mocha": "^5.2.0",
     "mysql2": "^1.6.5",
@@ -55,8 +55,8 @@
     "sinon": "^6.3.4",
     "source-map-support": "^0.4.15",
     "ts-node": "^3.1.0",
-    "tslint": "^5.13.1",
-    "typescript": "^3.3.3333"
+    "tslint": "^5.14.0",
+    "typescript": "^3.3.4000"
   },
   "bugs": {
     "url": "https://github.com/rxstack/sequelize-service/issues"
@@ -70,9 +70,6 @@
   "nyc": {
     "extension": [
       ".ts"
-    ],
-    "require": [
-      "ts-node/register"
     ],
     "reporter": [
       "text-summary",

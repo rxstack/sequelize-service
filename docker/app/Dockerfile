@@ -1,12 +1,11 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
 MAINTAINER Nikolay Georgiev <symfonist@gmail.com>
 
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    python-software-properties \
+    software-properties-common \
     curl
 
 RUN curl -sL https://deb.nodesource.com/setup_11.x | bash

@@ -27,7 +27,7 @@
 npm install @rxstack/sequelize-service --save
 
 // peer depencencies
-npm install  @rxstack/core@^0.1 @rxstack/platform@^0.1.10 @rxstack/exceptions@^0.1 @rxstack/query-filter@^0.1 @rxstack/security@^0.1 
+npm install @rxstack/core@^0.2 @rxstack/platform@^0.2 @rxstack/exceptions@^0.2 @rxstack/query-filter@^0.2 @rxstack/security@^0.2 @rxstack/async-event-dispatcher@^0.2 @rxstack/service-registry@^0.2
 ```
 
 and add one of the following:
@@ -236,7 +236,7 @@ npm run cli sequelize:drop
 `ValidationObserver` converts sequelize errors to `BadRequestException`.
 
 In order to return proper validation errors and status code `400 ` we catch the exception and throw `BadRequestException`.
-The error messages can be accessed `exception.data['errors']` and implement [`ValidationError[]`](https://github.com/rxstack/rxstack/tree/master/packages/platform/src).
+The error messages can be accessed `exception.data['errors']` and implement [`ValidationError[]`](https://github.com/rxstack/rxstack/blob/master/packages/platform/src/interfaces.ts).
 
 ## License
 
