@@ -6,6 +6,10 @@ import {data1} from './mocks/data';
 import {Task} from './mocks/task';
 import {SEQUELIZE_CONNECTION_TOKEN, SequelizeService} from '../src';
 
+const Sequelize = require('sequelize');
+const Op: any = Sequelize.Op;
+
+
 describe('SequelizeService:Impl', () => {
   // Setup application
   const app = new Application(SEQUELIZE_SERVICE_OPTIONS);
@@ -71,7 +75,7 @@ describe('SequelizeService:Impl', () => {
 
   it('#updateMany', async () => {
     await service.insertMany(data1);
-    const cnt = await service.updateMany({'_id': {'$eq': 2}}, {'name': 'patched'});
+    const cnt = await service.updateMany({'_id': {[Op.eq]: 2}}, {'name': 'patched'});
     cnt.should.be.equal(1);
     const result = await service.find(2);
     result.name.should.be.equal('patched');
@@ -86,7 +90,7 @@ describe('SequelizeService:Impl', () => {
 
   it('#removeMany', async () => {
     await service.insertMany(data1);
-    const result = await service.removeMany({ '_id': {'$eq': 2}});
+    const result = await service.removeMany({ '_id': {[Op.eq]: 2}});
     result.should.equal(1);
     const cnt = await service.count();
     cnt.should.equal(2);
@@ -100,7 +104,7 @@ describe('SequelizeService:Impl', () => {
 
   it('#findMany with query', async () => {
     await service.insertMany(data1);
-    const result = await service.findMany({'where': {'name': {'$eq': 'task-1'}}, limit: 10, skip: 0});
+    const result = await service.findMany({'where': {'name': {[Op.eq]: 'task-1'}}, limit: 10, skip: 0});
     result.length.should.be.equal(1);
   });
 
@@ -130,13 +134,13 @@ describe('SequelizeService:Impl', () => {
 
   it('#count with query', async () => {
     await service.insertMany(data1);
-    const result = await service.count({'name': {'$eq': 'task-1'}});
+    const result = await service.count({'name': {[Op.eq]: 'task-1'}});
     result.should.be.equal(1);
   });
 
   it('#findOne', async () => {
     await service.insertMany(data1);
-    const result = await service.findOne({'name': {'$eq': 'task-1'}});
+    const result = await service.findOne({'name': {[Op.eq]: 'task-1'}});
     result.name.should.be.equal('task-1');
   });
 });

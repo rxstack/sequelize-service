@@ -1,10 +1,11 @@
-const Sequelize = require('sequelize');
+import {DataTypes, Sequelize} from 'sequelize';
+import {ModelStatic} from '../../../src';
 
-export const defineComment = (connection: any): Object =>  {
-  return connection.define('comment', {
+export const defineComment = (connection: Sequelize): ModelStatic =>  {
+  return <ModelStatic>connection.define('comment', {
     title: {
-      type: Sequelize.STRING, allowNull: false,
+      type: DataTypes.STRING, allowNull: false,
     },
-    commentable_id: Sequelize.INTEGER
+    commentable_id: DataTypes.INTEGER
   });
 };

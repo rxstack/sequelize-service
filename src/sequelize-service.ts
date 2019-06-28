@@ -3,7 +3,8 @@ import {QueryInterface} from '@rxstack/query-filter';
 import {Injectable, Injector} from 'injection-js';
 import {InjectorAwareInterface} from '@rxstack/core';
 import * as _ from 'lodash';
-import {SequelizeServiceOptions} from './interfaces';
+import {ModelStatic, SequelizeServiceOptions} from './interfaces';
+import {CountOptions} from 'sequelize/types/lib/model';
 
 @Injectable()
 export class SequelizeService<T> implements ServiceInterface<T>, InjectorAwareInterface {
@@ -18,7 +19,7 @@ export class SequelizeService<T> implements ServiceInterface<T>, InjectorAwareIn
 
   async insertOne(data: Object, options?: any): Promise<T> {
     const result = await this.getModel().create(data, options);
-    return result.get({plain: true});
+    return result.get<any>({plain: true});
   }
 
   async insertMany(data: Object[], options?: any): Promise<T[]> {
@@ -27,7 +28,7 @@ export class SequelizeService<T> implements ServiceInterface<T>, InjectorAwareIn
   }
 
   async updateOne(id: any, data: Object, options?: any): Promise<void> {
-    return await this.getModel().update(
+    await this.getModel().update(
       _.omit(data, [this.options.idField]), Object.assign({where: {[this.options.idField]: id}}, options)
     );
   }
@@ -37,7 +38,7 @@ export class SequelizeService<T> implements ServiceInterface<T>, InjectorAwareIn
       _.omit(data, [this.options.idField]),
       Object.assign({where: criteria}, options)
     );
-    return parseInt(result.shift());
+    return result.shift() as number;
   }
 
   async removeOne(id: any, options?: any): Promise<void> {
@@ -48,16 +49,18 @@ export class SequelizeService<T> implements ServiceInterface<T>, InjectorAwareIn
     return await this.getModel().destroy(Object.assign({where: criteria}, options));
   }
 
-  count(criteria?: Object, options?: any): Promise<number> {
-    return this.getModel().count(Object.assign({ where: criteria }, options));
+  async count(criteria?: Object, options?: any): Promise<number> {
+    const countOptions: CountOptions = Object.assign({ where: criteria }, options);
+    return  await this.getModel().count(countOptions);
   }
 
   async find(id: any, options?: any): Promise<T> {
-    return await this.getModel().findByPk(id, options);
+    const result = await this.getModel().findByPk(id, options);
+    if (result) return result.get<any>({plain: true});
   }
 
   async findOne(criteria: Object, options?: any): Promise<T> {
-    return this.getModel().findOne(Object.assign({ where: criteria, raw: true }, options));
+    return await this.getModel().findOne<any>(Object.assign({ where: criteria, raw: true }, options));
   }
 
   async findMany(query?: QueryInterface, options?: any): Promise<T[]> {
@@ -65,7 +68,7 @@ export class SequelizeService<T> implements ServiceInterface<T>, InjectorAwareIn
     const sqlQuery = Object.assign({
       where: query.where, limit: query.limit, offset: query.skip, order: this.getOrder(query.sort), raw: true
     }, options);
-    return await this.getModel().findAll(sqlQuery);
+    return await this.getModel().findAll<any>(sqlQuery);
   }
 
   protected getOrder(sort: Object): [string, number][] {
@@ -75,7 +78,7 @@ export class SequelizeService<T> implements ServiceInterface<T>, InjectorAwareIn
     }, []);
   }
 
-  protected getModel(): any {
+  protected getModel(): ModelStatic {
     return this.options.model;
   }
 }

@@ -1,20 +1,21 @@
-const Sequelize = require('sequelize');
+import {DataTypes, Sequelize} from 'sequelize';
+import {ModelStatic} from '../../../src';
 
-export const defineTask = (connection: any): Object =>  {
-  return connection.define('task', {
+export const defineTask = (connection: Sequelize): ModelStatic =>  {
+  return <ModelStatic>connection.define('task', {
     _id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },
     name: {
-      type: Sequelize.STRING, allowNull: false, unique: true,
+      type: DataTypes.STRING, allowNull: false, unique: true,
       validate: {
         notEmpty: true
       }
     },
     completed: {
-      type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false
+      type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false
     }
   });
 };

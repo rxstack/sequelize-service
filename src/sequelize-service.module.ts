@@ -3,23 +3,13 @@ import {SEQUELIZE_CONNECTION_TOKEN, SequelizeServiceModuleOptions} from './inter
 import {Provider} from 'injection-js';
 import {DropCommand, SyncCommand} from './commands';
 import {ValidationObserver} from './validation.observer';
+import { Sequelize } from 'sequelize';
 
 const winstonLogger = require('winston');
-const Sequelize = require('sequelize');
-const Op = Sequelize.Op;
+
+
 const connectionProvider =  async function(options: SequelizeServiceModuleOptions): Promise<Provider> {
   const connection: any = new Sequelize(Object.assign(options.connection, {
-    operatorsAliases: {
-      $eq: Op.eq,
-      $ne: Op.ne,
-      $gte: Op.gte,
-      $gt: Op.gt,
-      $lte: Op.lte,
-      $lt: Op.lt,
-      $in: Op.in,
-      $nin: Op.notIn,
-      $or: Op.or
-    },
     logging: (data: any, benchmark: any) => {
       if (options.logger.enabled) {
         winstonLogger.log(

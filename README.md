@@ -16,6 +16,7 @@
     - [Create interfaces](#usage-interfaces)
     - [Create sequelize models](#usage-models)
     - [How to use in controller](#usage-controller)
+    - [How to build queries with query-filter](#usage-query-filter)
 - [Commands](#commands)
     - [Sync](#commands-sync)
     - [Drop](#commands-drop)
@@ -27,7 +28,7 @@
 npm install @rxstack/sequelize-service --save
 
 // peer depencencies
-npm install @rxstack/core@^0.2 @rxstack/platform@^0.2 @rxstack/exceptions@^0.2 @rxstack/query-filter@^0.2 @rxstack/security@^0.2 @rxstack/async-event-dispatcher@^0.2 @rxstack/service-registry@^0.2
+npm install @rxstack/core@^0.3 @rxstack/platform@^0.3 @rxstack/exceptions@^0.3 @rxstack/query-filter@^0.3 @rxstack/security@^0.3 @rxstack/async-event-dispatcher@^0.3 @rxstack/service-registry@^0.3
 ```
 
 and add one of the following:
@@ -112,17 +113,18 @@ export const PRODUCT_SERVICE = new InjectionToken<SequelizeService<Product>>('PR
 
 
 ```typescript
-const Sequelize = require('sequelize');
+import {DataTypes, Sequelize} from 'sequelize';
+import {ModelStatic} from '@rxstack/sequelize-service';
 
-export const defineProduct = (connection: any): Object =>  {
+export const defineProduct = (connection: Sequelize): ModelStatic =>  {
   return connection.define('product', {
     _id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },
     name: {
-      type: Sequelize.STRING, allowNull: false, unique: true,
+      type: DataTypes.STRING, allowNull: false, unique: true,
       validate: {
         notEmpty: true
       }
@@ -134,11 +136,13 @@ export const defineProduct = (connection: any): Object =>  {
 define all models in a singe function (useful to set associations) :
 
 ```typescript
+import {DataTypes, Sequelize} from 'sequelize';
+import {ModelStatic} from '@rxstack/sequelize-service';
 import {defineProduct} from './product.schema';
 
-export const defineModels = (connection: any): Object =>  {
+export const defineModels = (connection: Sequelize): {[key: string]: ModelStatic} =>  {
 
-  const product: any = defineProduct(connection);
+  const product = defineProduct(connection);
   // define other models here
   // ...
   // define associations here
@@ -157,22 +161,24 @@ import {InjectionToken} from 'injection-js';
 import {ApplicationOptions} from '@rxstack/core';
 import {SequelizeService} from '@rxstack/sequelize-service';
 import {SEQUELIZE_CONNECTION_TOKEN} from '@rxstack/sequelize-service'
+import {ModelStatic} from '@rxstack/sequelize-service';
+import {Sequelize} from 'sequelize';
 
-export const SEQUELIZE_MODELS = new InjectionToken<any>('SEQUELIZE_MODELS'); 
+export const SEQUELIZE_MODELS = new InjectionToken<{[key: string]: ModelStatic}>('SEQUELIZE_MODELS'); 
 
 export const APP_OPTIONS: ApplicationOptions = {
   // ...
   providers: [
     {
       provide: SEQUELIZE_MODELS,
-      useFactory: (conn: any) => defineModels(conn),
+      useFactory: (conn: Sequelize) => defineModels(conn),
       deps: [SEQUELIZE_CONNECTION_TOKEN],
     },
     {
       provide: PRODUCT_SERVICE,
-      useFactory: (conn: any, models: any) => {
-        return new SequelizeService({
-          idField: '_id', defaultLimit: 25, model: models.task
+      useFactory: (conn: Sequelize, models: {[key: string]: ModelStatic}) => {
+        return new SequelizeService<Product>({
+          idField: '_id', defaultLimit: 25, model: models['product']
         });
       },
       deps: [SEQUELIZE_CONNECTION_TOKEN, SEQUELIZE_MODELS],
@@ -207,6 +213,30 @@ export class ProductController implements InjectorAwareInterface {
     });
   }
 }
+```
+
+### <a name="usage-query-filter"></a> How to build queries with query-filter
+
+If you use [@rxstack/query-filter](https://github.com/rxstack/rxstack/tree/master/packages/query-filter) 
+to build db queries then you need to replace default operators with sequelize specific ones:
+
+```typescript
+import {QueryFilterSchema, queryFilter} from '@rxstack/query-filter';
+import {Op} from 'sequelize';
+
+export const myQueryFilterSchema: QueryFilterSchema = {
+  'properties': {
+    'product_name': {
+      'property_path': 'name',
+      'operators': ['$ne', '$eq'],
+      'replace_operators': [['$eq', Op.eq], ['$ne', Op.ne]],
+      'sort': true
+    }
+  },
+  'allowOrOperator': true,
+  'replaceOrOperatorWith': Op.or,
+  'defaultLimit': 10
+};
 ```
 
 ## <a name="commands"></a>  Commands
