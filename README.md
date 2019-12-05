@@ -28,7 +28,7 @@
 npm install @rxstack/sequelize-service --save
 
 // peer depencencies
-npm install @rxstack/core@^0.4 @rxstack/platform@^0.4 @rxstack/exceptions@^0.4 @rxstack/query-filter@^0.4 @rxstack/security@^0.4 @rxstack/async-event-dispatcher@^0.4 @rxstack/service-registry@^0.4
+npm install @rxstack/core@^0.5 @rxstack/platform@^0.5 @rxstack/exceptions@^0.5 @rxstack/query-filter@^0.5 @rxstack/security@^0.5 @rxstack/async-event-dispatcher@^0.5 @rxstack/service-registry@^0.5 winston@^3.2.1
 ```
 
 and add one of the following:
@@ -71,10 +71,7 @@ export const APP_OPTIONS: ApplicationOptions = {
   ],
   providers: [
     // ...
-  ],
-  logger: {
-    // ...
-  }
+  ]
 };
 
 new Application(APP_OPTIONS).start();
@@ -84,7 +81,7 @@ new Application(APP_OPTIONS).start();
 
 - `connection`: [sequelize options](http://docs.sequelizejs.com/manual/installation/getting-started.html)
 - `logger.enabled`: enable query logging (defaults to false)
-- `logger.level`: logging level (defaults to debug), [LoggingLevel](https://github.com/rxstack/rxstack/blob/master/packages/core/src/logger/interfaces.ts#L3)
+- `logger.level`: logging level
 
 ## <a name="service-options"></a> Service Options
 In addition to [service base options](https://github.com/rxstack/rxstack/tree/preparing-release/packages/platform#services-options)
@@ -117,7 +114,7 @@ import {DataTypes, Sequelize} from 'sequelize';
 import {ModelStatic} from '@rxstack/sequelize-service';
 
 export const defineProduct = (connection: Sequelize): ModelStatic =>  {
-  return connection.define('product', {
+  return <ModelStatic>connection.define('product', {
     _id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -191,7 +188,7 @@ export const APP_OPTIONS: ApplicationOptions = {
 
 ```typescript
 import {Injectable} from 'injection-js';
-import {Http, Logger, Request, Response, WebSocket, InjectorAwareInterface} from '@rxstack/core';
+import {Http, Request, Response, WebSocket, InjectorAwareInterface} from '@rxstack/core';
 
 @Injectable()
 export class ProductController implements InjectorAwareInterface {
@@ -221,7 +218,7 @@ If you use [@rxstack/query-filter](https://github.com/rxstack/rxstack/tree/maste
 to build db queries then you need to replace default operators with sequelize specific ones:
 
 ```typescript
-import {QueryFilterSchema, queryFilter} from '@rxstack/query-filter';
+import {QueryFilterSchema} from '@rxstack/query-filter';
 import {Op} from 'sequelize';
 
 export const myQueryFilterSchema: QueryFilterSchema = {

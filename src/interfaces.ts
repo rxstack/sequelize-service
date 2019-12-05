@@ -1,13 +1,12 @@
 import {ServiceOptions} from '@rxstack/platform';
 import {InjectionToken} from 'injection-js';
-import {LoggingLevel} from '@rxstack/core';
 import {BuildOptions, Model, Options, Sequelize} from 'sequelize';
 
 export interface SequelizeServiceModuleOptions {
   connection: Options;
   logger?: {
     enabled: boolean;
-    level?: LoggingLevel;
+    level?: string;
   };
 }
 

@@ -45,15 +45,5 @@ export const SEQUELIZE_SERVICE_OPTIONS: ApplicationOptions = {
       },
       deps: [SEQUELIZE_CONNECTION_TOKEN, MODELS],
     }
-  ],
-  logger: {
-    handlers: [
-      {
-        type: 'console',
-        options: {
-          level: 'silly',
-        }
-      }
-    ]
-  },
+  ]
 };

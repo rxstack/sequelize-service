@@ -14,7 +14,8 @@ const connectionProvider =  async function(options: SequelizeServiceModuleOption
       if (options.logger.enabled) {
         winstonLogger.log(
           options.logger.level,
-          'Sequelize:', {query: data, benchmark: benchmark + ' ms'}
+          'Sequelize:',
+          {query: data, benchmark: benchmark + ' ms'}
         );
       }
     },
