@@ -28,7 +28,7 @@
 npm install @rxstack/sequelize-service --save
 
 // peer depencencies
-npm install @rxstack/core@^0.5 @rxstack/platform@^0.5 @rxstack/exceptions@^0.5 @rxstack/query-filter@^0.5 @rxstack/security@^0.5 @rxstack/async-event-dispatcher@^0.5 @rxstack/service-registry@^0.5 winston@^3.2.1
+npm install @rxstack/core@^0.6 @rxstack/platform@^0.6 @rxstack/exceptions@^0.5 @rxstack/query-filter@^0.5 @rxstack/security@^0.6 @rxstack/async-event-dispatcher@^0.5 @rxstack/service-registry@^0.5 winston@^3.2.1
 ```
 
 and add one of the following:
